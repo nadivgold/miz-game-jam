@@ -1,22 +1,32 @@
-function explode(radius, strength, origin, duration, physicsHelper, scene){
-    var event = physicsHelper.applyRadialExplosionImpulse( // or .applyRadialExplosionForce
-        origin,
-        {
-            radius: radius,
-            strength: strength,
-            falloff: BABYLON.PhysicsRadialImpulseFalloff.Linear, // or BABYLON.PhysicsRadialImpulseFalloff.Constant
-        }
-    );
+import { knobs } from "./knobs.js";
 
-    // Debug
-    var eventData = event.getData();
-    var debugData = showExplosionDebug(eventData, scene);
-    setTimeout(function (debugData) {
-        hideExplosionDebug(debugData);
-        event.dispose(); // we need to cleanup/dispose, after we don't use the data anymore
-    }, duration, debugData);
-    // Debug - END
+function explode(radius, strength, origin, duration, physicsHelper, scene){
+    if(knobs.explosion.enabled){
+        knobs.explosion.enabled = 0;
+        var event = physicsHelper.applyRadialExplosionImpulse( // or .applyRadialExplosionForce
+            origin,
+            {
+                radius: radius,
+                strength: strength,
+                falloff: BABYLON.PhysicsRadialImpulseFalloff.Linear, // or BABYLON.PhysicsRadialImpulseFalloff.Constant
+            }
+        );
+
+        // Debug
+        var eventData = event.getData();
+        var debugData = showExplosionDebug(eventData, scene);
+        setTimeout(function (debugData) {
+            hideExplosionDebug(debugData);
+            event.dispose(); // we need to cleanup/dispose, after we don't use the data anymore
+        }, duration, debugData);
+        // Debug - END
+        setTimeout(() => {
+            knobs.explosion.enabled = 1;
+        }, knobs.explosion.timeout);
+    } 
 }
+
+
  // Helpers
  function addMaterialToMesh(sphere, scene) {
     var sphereMaterial = new BABYLON.StandardMaterial("sphereMaterial", scene);
