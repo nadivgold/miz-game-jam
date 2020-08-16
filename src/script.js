@@ -89,8 +89,6 @@
             }
         
         
-
-        
         
             // Helpers
             function addMaterialToMesh(sphere) {
