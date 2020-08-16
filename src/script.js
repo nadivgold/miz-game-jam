@@ -1,4 +1,6 @@
 import { explode } from "./explode.js";
+import { initBoxes } from "./initialize.js"
+import { store } from "./store.js"
 
         var canvas = document.getElementById("renderCanvas");
 
@@ -49,68 +51,25 @@ import { explode } from "./explode.js";
             }));
             
             // Boxes
-            var boxSize = 2;
-            var boxPadding = 4;
-            var minXY = -12;
-            var maxXY = 12;
-            var maxZ = 8;
-            var boxParams = { height: boxSize, width: boxSize, depth: boxSize };
-            var boxImpostorParams = { mass: 0.5 * boxSize, restitution: 0, friction: 1 };
-            var boxMaterial = new BABYLON.StandardMaterial("boxMaterial");
-            boxMaterial.diffuseColor = new BABYLON.Color3(1, 0, 0);
-            for (var x = minXY; x <= maxXY; x += boxSize + boxPadding) {
-                for (var z = minXY; z <= maxXY; z += boxSize + boxPadding) {
-                    for (var y = boxSize / 2; y <= maxZ; y += boxSize) {
-                        var boxName = "box:" + x + ',' + y + ',' + z;
-                        var box = BABYLON.MeshBuilder.CreateBox(boxName, boxParams, scene);
-                        box.position = new BABYLON.Vector3(x, y, z);
-                        box.material = boxMaterial;
-                        box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, boxImpostorParams, scene);
-                        physicsViewer.showImpostor(box.physicsImpostor);
-                    }
-                }
-            }
-        
+            initBoxes(2, 4, -12, 12, 8, scene, physicsViewer);
+            store.state = "play";
 
             // scene.registerBeforeRender(function() {
             setInterval(function(){  
                 if(inputMap["a"] || inputMap["ArrowLeft"]){
-                    player.position.x += 0.5;
+                    player.position.x += 1;
                 }
                 if(inputMap["w"] || inputMap["ArrowUp"]){
-                    player.position.z -= 0.5;
+                    player.position.z -= 1;
                 }
                 if(inputMap["d"] || inputMap["ArrowRight"]){
-                    player.position.x -= 0.5;
+                    player.position.x -= 1;
                 }
                 if(inputMap["s"] || inputMap["ArrowDown"]){
-                    player.position.z += 0.5;
+                    player.position.z += 1;
                 }
                 if(inputMap[" "]){
-                  explode(8, 20, player.position, 1000, physicsHelper);
-                    // Radial explosion impulse/force
-            // var radius = 8;
-            // var strength = 20;
-            // var origin = player.position;
-            // setTimeout(function (origin) {
-            //     var event = physicsHelper.applyRadialExplosionImpulse( // or .applyRadialExplosionForce
-            //         origin,
-            //         {
-            //             radius: radius,
-            //             strength: strength,
-            //             falloff: BABYLON.PhysicsRadialImpulseFalloff.Linear, // or BABYLON.PhysicsRadialImpulseFalloff.Constant
-            //         }
-            //     );
-    
-            //     // Debug
-            //     var eventData = event.getData();
-            //     var debugData = showExplosionDebug(eventData);
-            //     setTimeout(function (debugData) {
-            //         hideExplosionDebug(debugData);
-            //         event.dispose(); // we need to cleanup/dispose, after we don't use the data anymore
-            //     }, 1500, debugData);
-            //     // Debug - END
-            // }, 1000, origin);
+                  explode(store.explosion.radius, store.explosion.strength, player.position, store.explosion.duration, physicsHelper, scene);
             }        
             }, 33);
 
