@@ -1,3 +1,4 @@
+import { explode } from "./explode.js";
 
         var canvas = document.getElementById("renderCanvas");
 
@@ -18,9 +19,10 @@
         
         
             // Camera
-            var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 24, -64), scene);
-            camera.setTarget(BABYLON.Vector3.Zero());
-            camera.attachControl(canvas, true);
+            var camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 0, 0), scene);
+            camera.radius = 25;
+            camera.heightOffset = 35;
+        
         
         
             // Lightning
@@ -31,8 +33,21 @@
             // Ground
             var ground = BABYLON.Mesh.CreateGround("ground1", 64, 64, 2, scene);
             ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
-        
-        
+            
+            // create player
+            var player = BABYLON.Mesh.CreateBox("box", 1, scene);
+            player.position.y = 0.5;
+            camera.lockedTarget = player;
+            
+            var inputMap ={};
+            scene.actionManager = new BABYLON.ActionManager(scene);
+            scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnKeyDownTrigger, function (evt) {
+                inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";
+            }));
+            scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnKeyUpTrigger, function (evt) {
+                inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";
+            }));
+            
             // Boxes
             var boxSize = 2;
             var boxPadding = 4;
@@ -56,63 +71,57 @@
                 }
             }
         
-        
-            // Radial explosion impulse/force
-            var radius = 8;
-            var strength = 20;
-            var origins = [
-                new BABYLON.Vector3(-8, 6, 0),
-                new BABYLON.Vector3(0, 0, 0),
-            ];
-            for (var i = 0; i < origins.length; i++) {
-                var origin = origins[i];
-        
-                setTimeout(function (origin) {
-                    var event = physicsHelper.applyRadialExplosionImpulse( // or .applyRadialExplosionForce
-                        origin,
-                        {
-                            radius: radius,
-                            strength: strength,
-                            falloff: BABYLON.PhysicsRadialImpulseFalloff.Linear, // or BABYLON.PhysicsRadialImpulseFalloff.Constant
-                        }
-                    );
-        
-                    // Debug
-                    var eventData = event.getData();
-                    var debugData = showExplosionDebug(eventData);
-                    setTimeout(function (debugData) {
-                        hideExplosionDebug(debugData);
-                        event.dispose(); // we need to cleanup/dispose, after we don't use the data anymore
-                    }, 1500, debugData);
-                    // Debug - END
-                }, i * 2000 + 1000, origin);
-            }
-        
-        
-        
-            // Helpers
-            function addMaterialToMesh(sphere) {
-                var sphereMaterial = new BABYLON.StandardMaterial("sphereMaterial", scene);
-                sphereMaterial.alpha = 0.5;
-                sphere.material = sphereMaterial;
-            }
-        
-            function showExplosionDebug(data) {
-                addMaterialToMesh(data.sphere);
-                data.sphere.isVisible = true;
-        
-                return {
-                    sphere: data.sphere,
-                };
-            }
-        
-            function hideExplosionDebug(debugData) {
-                debugData.sphere.isVisible = false;
-            }
+
+            // scene.registerBeforeRender(function() {
+            setInterval(function(){  
+                if(inputMap["a"] || inputMap["ArrowLeft"]){
+                    player.position.x += 0.5;
+                }
+                if(inputMap["w"] || inputMap["ArrowUp"]){
+                    player.position.z -= 0.5;
+                }
+                if(inputMap["d"] || inputMap["ArrowRight"]){
+                    player.position.x -= 0.5;
+                }
+                if(inputMap["s"] || inputMap["ArrowDown"]){
+                    player.position.z += 0.5;
+                }
+                if(inputMap[" "]){
+                  explode(8, 20, player.position, 1000, physicsHelper);
+                    // Radial explosion impulse/force
+            // var radius = 8;
+            // var strength = 20;
+            // var origin = player.position;
+            // setTimeout(function (origin) {
+            //     var event = physicsHelper.applyRadialExplosionImpulse( // or .applyRadialExplosionForce
+            //         origin,
+            //         {
+            //             radius: radius,
+            //             strength: strength,
+            //             falloff: BABYLON.PhysicsRadialImpulseFalloff.Linear, // or BABYLON.PhysicsRadialImpulseFalloff.Constant
+            //         }
+            //     );
+    
+            //     // Debug
+            //     var eventData = event.getData();
+            //     var debugData = showExplosionDebug(eventData);
+            //     setTimeout(function (debugData) {
+            //         hideExplosionDebug(debugData);
+            //         event.dispose(); // we need to cleanup/dispose, after we don't use the data anymore
+            //     }, 1500, debugData);
+            //     // Debug - END
+            // }, 1000, origin);
+            }        
+            }, 33);
+
         
             return scene;
         
         };
+
+
+
+
     var engine;
     try {
     engine = createDefaultEngine();
