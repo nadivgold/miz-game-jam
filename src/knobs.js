@@ -12,4 +12,8 @@ export var knobs = {
         playerMoveSpeed: 0.03,
         rayLength: 0.075,  
     },
+    enemyAi: {
+        slowMoveSpeed: 0.005,
+        rayLength: 0.075,
+    },
 };

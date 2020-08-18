@@ -2,6 +2,7 @@ import { explode } from "./explode.js";
 import { initBoxes } from "./initialize.js";
 import { knobs } from "./knobs.js";
 import { handleControls } from "./controls.js";
+import { moveAi } from "./enemyAi.js";
 
     var canvas = document.getElementById("renderCanvas");
 
@@ -54,13 +55,14 @@ import { handleControls } from "./controls.js";
         }));
         
         // Boxes
-        initBoxes(2, 4, -12, 12, 3, scene, physicsViewer);
+        const boxes = initBoxes(2, 4, -12, 12, 1, scene, physicsViewer);
         knobs.state = "play"; 
 
         scene.onBeforeRenderObservable.add(()=>{ 
             var deltaTime = engine.getDeltaTime();
             if (knobs.state == "play") {
                 handleControls(player, inputMap, deltaTime, explode, physicsHelper, scene)
+                boxes.forEach(box => (moveAi(box, player, deltaTime, scene)));
             }   
         })
 
