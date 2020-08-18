@@ -1,5 +1,5 @@
-import { knobs } from "./knobs.js";
-import { handleEntCollision } from "./collision.js"
+import { knobs } from "../knobs.js";
+import { handleEntCollision } from "../collision.js"
 
 function handleControls(player, inputMap, deltaTime, explode, physicsHelper, scene){
     if(inputMap["a"] || inputMap["A"] || inputMap["ArrowLeft"]){

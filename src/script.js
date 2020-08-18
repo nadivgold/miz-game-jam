@@ -1,8 +1,9 @@
 import { explode } from "./explode.js";
 import { initBoxes } from "./initialize.js";
 import { knobs } from "./knobs.js";
-import { handleControls } from "./controls.js";
-import { moveAi } from "./enemyAi.js";
+import { handleControls } from "./controls/controls.js";
+import { handleAi } from "./enemyAi.js";
+import { pauseToggle } from "./controls/pause.js"
 
     var canvas = document.getElementById("renderCanvas");
 
@@ -26,6 +27,8 @@ import { moveAi } from "./enemyAi.js";
         var camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 0, 0), scene);
         camera.radius = 25;
         camera.heightOffset = 35;
+        camera.attachControl(canvas, true);
+        camera.inputs.clear();
     
     
     
@@ -44,6 +47,7 @@ import { moveAi } from "./enemyAi.js";
         player.position.y = 0.5;
         player.position.x = 20;
         camera.lockedTarget = player;
+
         
         var inputMap ={};
         scene.actionManager = new BABYLON.ActionManager(scene);
@@ -60,9 +64,10 @@ import { moveAi } from "./enemyAi.js";
 
         scene.onBeforeRenderObservable.add(()=>{ 
             var deltaTime = engine.getDeltaTime();
+            pauseToggle(inputMap);
             if (knobs.state == "play") {
                 handleControls(player, inputMap, deltaTime, explode, physicsHelper, scene)
-                boxes.forEach(box => (moveAi(box, player, deltaTime, scene)));
+                boxes.forEach(box => (handleAi(box, player, deltaTime, scene)));
             }   
         })
 

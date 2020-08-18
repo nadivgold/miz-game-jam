@@ -1,6 +1,6 @@
 import { knobs } from "./knobs.js";
 
-function moveAi(enemy, player, deltaTime, scene){
+function handleAi(enemy, player, deltaTime, scene){
     if(Math.round(enemy.position.y) === 1){
         if(enemy.position.x < player.position.x ){
                 enemy.position.x += knobs.enemyAi.slowMoveSpeed * deltaTime;
@@ -17,4 +17,4 @@ function moveAi(enemy, player, deltaTime, scene){
     }
 }
 
-export {moveAi};
+export {handleAi};
