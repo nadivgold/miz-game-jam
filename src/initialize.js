@@ -1,4 +1,4 @@
-function initBoxes(boxSize, boxPadding, minXY, maxXY, maxZ, scene, physicsViewer){
+function initBoxes(boxSize, boxPadding, minXY, maxXY, maxZ, scene){
     var boxParams = { height: boxSize, width: boxSize, depth: boxSize };
     var boxImpostorParams = { mass: 0.5 * boxSize, restitution: 0, friction: 1 };
     var boxMaterial = new BABYLON.StandardMaterial("boxMaterial");
@@ -11,7 +11,7 @@ function initBoxes(boxSize, boxPadding, minXY, maxXY, maxZ, scene, physicsViewer
                 box.position = new BABYLON.Vector3(x, y, z);
                 box.material = boxMaterial;
                 box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, boxImpostorParams, scene);
-                physicsViewer.showImpostor(box.physicsImpostor);
+                // physicsViewer.showImpostor(box.physicsImpostor);
             }
         }
     }

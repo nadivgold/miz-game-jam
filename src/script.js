@@ -1,6 +1,7 @@
 import { explode } from "./explode.js";
-import { initBoxes } from "./initialize.js"
-import { knobs } from "./knobs.js"
+import { initBoxes } from "./initialize.js";
+import { knobs } from "./knobs.js";
+import { handleControls } from "./controls.js";
 
     var canvas = document.getElementById("renderCanvas");
 
@@ -37,8 +38,10 @@ import { knobs } from "./knobs.js"
         ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
         
         // create player
-        var player = BABYLON.Mesh.CreateBox("box", 1, scene);
+        var player = BABYLON.Mesh.CreateBox("player", 1, scene);
+        // player.physicsImpostor = new BABYLON.PhysicsImpostor(player, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 100, restitution: 1 }, scene)
         player.position.y = 0.5;
+        player.position.x = 20;
         camera.lockedTarget = player;
         
         var inputMap ={};
@@ -51,29 +54,15 @@ import { knobs } from "./knobs.js"
         }));
         
         // Boxes
-        initBoxes(2, 4, -12, 12, 8, scene, physicsViewer);
-        knobs.state = "play";
+        initBoxes(2, 4, -12, 12, 3, scene, physicsViewer);
+        knobs.state = "play"; 
 
-        // scene.registerBeforeRender(function() {
-        setInterval(function(){  
+        scene.onBeforeRenderObservable.add(()=>{ 
+            var deltaTime = engine.getDeltaTime();
             if (knobs.state == "play") {
-                if(inputMap["a"] || inputMap["ArrowLeft"]){
-                    player.position.x += knobs.playerMoveSpeed;
-                }
-                if(inputMap["w"] || inputMap["ArrowUp"]){
-                    player.position.z -= knobs.playerMoveSpeed;
-                }
-                if(inputMap["d"] || inputMap["ArrowRight"]){
-                    player.position.x -= knobs.playerMoveSpeed;
-                }
-                if(inputMap["s"] || inputMap["ArrowDown"]){
-                    player.position.z += knobs.playerMoveSpeed;
-                }
-                if(inputMap[" "]){
-                    explode(knobs.explosion.radius, knobs.explosion.strength, player.position, knobs.explosion.duration, physicsHelper, scene);
-                }     
+                handleControls(player, inputMap, deltaTime, explode, physicsHelper, scene)
             }   
-        }, 25); // 40 fps
+        })
 
     
         return scene;
