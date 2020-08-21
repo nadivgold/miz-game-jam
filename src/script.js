@@ -47,6 +47,7 @@ import { pauseToggle } from "./controls/pause.js"
         player.position.y = 0.5;
         player.position.x = 20;
         camera.lockedTarget = player;
+        camera.sensibility = 0;
 
         
         var inputMap ={};
