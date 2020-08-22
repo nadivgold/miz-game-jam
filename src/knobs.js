@@ -1,6 +1,7 @@
 export var knobs = {
     state: "loading",
     frameRate: 25, // 40 fps
+    health: 6,
     explosion: {
         radius: 8,
         strength: 20,
@@ -15,5 +16,9 @@ export var knobs = {
     enemyAi: {
         slowMoveSpeed: 0.005,
         rayLength: 0.075,
+    },
+    worldSize: {
+        worldx: 100,
+        worldz: 100,
     },
 };

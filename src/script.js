@@ -3,101 +3,101 @@ import { initBoxes } from "./initialize.js";
 import { knobs } from "./knobs.js";
 import { handleControls } from "./controls/controls.js";
 import { handleAi } from "./enemyAi.js";
-import { pauseToggle } from "./controls/pause.js"
+import { pauseToggle } from "./controls/pause.js";          
+import { gui } from './gui.js';
 
-    var canvas = document.getElementById("renderCanvas");
+var canvas = document.getElementById("renderCanvas");
 
-    var engine = null;
-    var scene = null;
-    var sceneToRender = null;
-    var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true }); };
-    var createScene = function () {
-    
-        // Scene
-        var scene = new BABYLON.Scene(engine);
-        scene.enablePhysics();
-    
-    
-        // Physics engine
-        var physicsViewer = new BABYLON.Debug.PhysicsViewer();
-        var physicsHelper = new BABYLON.PhysicsHelper(scene);
-    
-    
-        // Camera
-        var camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 0, 0), scene);
-        camera.radius = 25;
-        camera.heightOffset = 35;
-        camera.attachControl(canvas, true);
-        camera.inputs.clear();
-    
-    
-    
-        // Lightning
-        var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
-        light.intensity = 0.7;
-    
-    
-        // Ground
-        var ground = BABYLON.Mesh.CreateGround("ground1", 64, 64, 2, scene);
-        ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
-        
-        // create player
-        var player = BABYLON.Mesh.CreateBox("player", 1, scene);
-        // player.physicsImpostor = new BABYLON.PhysicsImpostor(player, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 100, restitution: 1 }, scene)
-        player.position.y = 0.5;
-        player.position.x = 20;
-        camera.lockedTarget = player;
-        camera.sensibility = 0;
+var engine = null;
+var scene = null;
+var sceneToRender = null;
+var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true }); };
+var createScene = function () {
 
-        
-        var inputMap ={};
-        scene.actionManager = new BABYLON.ActionManager(scene);
-        scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnKeyDownTrigger, function (evt) {
-            inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";
-        }));
-        scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnKeyUpTrigger, function (evt) {
-            inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";
-        }));
-        
-        // Boxes
-        const boxes = initBoxes(2, 4, -12, 12, 1, scene, physicsViewer);
-        knobs.state = "play"; 
+    // Scene
+    var scene = new BABYLON.Scene(engine);
+    scene.enablePhysics();
 
-        scene.onBeforeRenderObservable.add(()=>{ 
-            var deltaTime = engine.getDeltaTime();
-            pauseToggle(inputMap);
-            if (knobs.state == "play") {
-                handleControls(player, inputMap, deltaTime, explode, physicsHelper, scene)
-                boxes.forEach(box => (handleAi(box, player, deltaTime, scene)));
-            }   
-        })
 
-    
-        return scene;
-    
-    };
+    // Physics engine
+    var physicsViewer = new BABYLON.Debug.PhysicsViewer();
+    var physicsHelper = new BABYLON.PhysicsHelper(scene);
+
+
+    // Camera
+    var camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 0, 0), scene);
+    camera.radius = 25;
+    camera.heightOffset = 35;
+    camera.attachControl(canvas, true);
+    camera.inputs.clear();
 
 
 
+    // Lightning
+    var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+    light.intensity = 0.7;
 
-    var engine;
-    try {
-    engine = createDefaultEngine();
-    } catch(e) {
-    console.log("the available createEngine function failed. Creating the default engine instead");
-    engine = createDefaultEngine();
-    }
-        if (!engine) throw 'engine should not be null.';
-        scene = createScene();;
-        sceneToRender = scene
+    gui()
 
-        engine.runRenderLoop(function () {
-            if (sceneToRender) {
-                sceneToRender.render();
-            }
-        });
+    // Ground
+    var ground = BABYLON.Mesh.CreateGround("ground1", knobs.worldSize.worldx, knobs.worldSize.worldz, 2, scene);
+    ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
+    // create player
+    var player = BABYLON.Mesh.CreateBox("player", 1, scene);
+    // player.physicsImpostor = new BABYLON.PhysicsImpostor(player, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 100, restitution: 1 }, scene)
+    player.position.y = 0.5;
+    camera.lockedTarget = player;
+    camera.sensibility = 0;
 
-        // Resize
-        window.addEventListener("resize", function () {
-            engine.resize();
-        });
+    
+    var inputMap ={};
+    scene.actionManager = new BABYLON.ActionManager(scene);
+    scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnKeyDownTrigger, function (evt) {
+        inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";
+    }));
+    scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnKeyUpTrigger, function (evt) {
+        inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";
+    }));
+    
+    // Boxes
+    const boxes = initBoxes(2, 4, -12, 12, 1, scene, physicsViewer);
+    knobs.state = "play"; 
+
+    scene.onBeforeRenderObservable.add(()=>{ 
+        var deltaTime = engine.getDeltaTime();
+        pauseToggle(inputMap);
+        if (knobs.state === "play") {
+            handleControls(player, inputMap, deltaTime, explode, physicsHelper, scene)
+            boxes.forEach(box => (handleAi(box, player, deltaTime, scene)));
+        }   
+    })
+
+
+    return scene;
+
+};
+
+
+
+
+var engine;
+try {
+engine = createDefaultEngine();
+} catch(e) {
+console.log("the available createEngine function failed. Creating the default engine instead");
+engine = createDefaultEngine();
+}
+    if (!engine) throw 'engine should not be null.';
+    scene = createScene();;
+    sceneToRender = scene
+
+    engine.runRenderLoop(function () {
+        if (sceneToRender) {
+            sceneToRender.render();
+        }
+    });
+
+    // Resize
+    window.addEventListener("resize", function () {
+        engine.resize();
+    });
