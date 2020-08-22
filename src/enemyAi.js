@@ -1,7 +1,8 @@
 import { knobs } from "./knobs.js";
 
-function handleAi(enemy, player, deltaTime, scene){
-    if(Math.round(enemy.position.y) === 1){
+function handleAi(enemy, player, deltaTime, scene, ground){
+        console.log("enemy: ", enemy.name);
+    if(Math.round(enemy.position.y) === 1 && !knobs.ents.removedEnts.includes(enemy.name) ){
         if(enemy.position.x < player.position.x ){
                 enemy.position.x += knobs.enemyAi.slowMoveSpeed * deltaTime;
         }
@@ -14,6 +15,13 @@ function handleAi(enemy, player, deltaTime, scene){
         if(enemy.position.z < player.position.z){
                 enemy.position.z += knobs.enemyAi.slowMoveSpeed * deltaTime;
         }
+    }
+    if(enemy.position.y < knobs.ents.killPlane && !knobs.ents.removedEnts.includes(enemy.name) ){
+        knobs.score++;
+        knobs.ents.removedEnts.push(enemy.name)
+        scene.removeMesh(enemy);
+        enemy.dispose();
+        enemy = null;
     }
 }
 

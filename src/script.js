@@ -75,7 +75,7 @@ var createScene = function () {
         scoreLabel.text = String("Score: " + knobs.score);
         if (knobs.state === "play") {
             handleControls(player, inputMap, deltaTime, explode, physicsHelper, scene)
-            boxes.forEach(box => (handleAi(box, player, deltaTime, scene)));
+            boxes.forEach(box => (handleAi(box, player, deltaTime, scene, ground)));
             boxes.forEach(box =>   {
                 if (player.intersectsMesh(box, true)) {
                     if(!knobs.invulnerable){

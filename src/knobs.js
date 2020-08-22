@@ -1,6 +1,7 @@
 export var knobs = {
     state: "loading",
     frameRate: 25, // 40 fps
+    difficulty: 0,
     health: 6,
     score: 0,
     iframe: 1000,
@@ -24,4 +25,8 @@ export var knobs = {
         worldx: 100,
         worldz: 100,
     },
+    ents:{
+        removedEnts:[],
+        killPlane: -5,
+    }
 };
