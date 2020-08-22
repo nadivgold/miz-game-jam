@@ -3,6 +3,8 @@ export var knobs = {
     frameRate: 25, // 40 fps
     health: 6,
     score: 0,
+    iframe: 1000,
+    invulnerable: false,
     explosion: {
         radius: 8,
         strength: 20,
