@@ -1,5 +1,5 @@
 import { explode } from "./explode.js";
-import { initBoxes } from "./initialize.js";
+import { initBoxes, createWave } from "./gameMaster.js";
 import { knobs } from "./knobs.js";
 import { handleControls } from "./controls/controls.js";
 import { handleAi } from "./enemyAi.js";
@@ -66,17 +66,21 @@ var createScene = function () {
     }));
     
     // Boxes
-    const boxes = initBoxes(2, 20, -12, 30, 1, scene, physicsViewer);
+    // const boxes = initBoxes(2, 20, -12, 30, 1, scene, physicsViewer);
+    knobs.gameStartTime = Math.floor((new Date().getTime() / 1000));
     knobs.state = "play"; 
+    
+    var testCallOnce = true;
 
     scene.onBeforeRenderObservable.add(()=>{ 
         var deltaTime = engine.getDeltaTime();
+        var currTime = Math.floor((new Date().getTime() / 1000));
         pauseToggle(inputMap);
         scoreLabel.text = String("Score: " + knobs.score);
         if (knobs.state === "play") {
             handleControls(player, inputMap, deltaTime, explode, physicsHelper, scene)
-            boxes.forEach(box => (handleAi(box, player, deltaTime, scene, ground)));
-            boxes.forEach(box =>   {
+            knobs.ents.entArr.forEach(box => (handleAi(box, player, deltaTime, scene, ground)));
+            knobs.ents.entArr.forEach(box =>   {
                 if (player.intersectsMesh(box, true)) {
                     if(!knobs.invulnerable){
                         knobs.health -= 1;
@@ -87,7 +91,14 @@ var createScene = function () {
                 console.log("collision, invin: ", knobs.invulnerable)
             } else {
             }
-        })
+        });
+        if(((currTime - knobs.gameStartTime) %  5 === 0)  && testCallOnce){
+            testCallOnce = false;
+            createWave(1, scene)
+            setTimeout(() => {
+                testCallOnce = true;
+            }, 3000)
+        }
         }   
     })
 

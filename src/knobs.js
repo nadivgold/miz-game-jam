@@ -26,6 +26,7 @@ export var knobs = {
         worldz: 100,
     },
     ents:{
+        entArr: [],
         removedEnts:[],
         killPlane: -5,
     }

@@ -1,13 +1,13 @@
 import { knobs } from "./knobs.js";
 
-function explode(radius, strength, origin, duration, physicsHelper, scene){
+function explode(origin, duration, physicsHelper, scene){
     if(knobs.explosion.enabled){
         knobs.explosion.enabled = 0;
         var event = physicsHelper.applyRadialExplosionImpulse( // or .applyRadialExplosionForce
             origin,
             {
-                radius: radius,
-                strength: strength,
+                radius: knobs.explosion.radius,
+                strength:  knobs.explosion.strength,
                 falloff: BABYLON.PhysicsRadialImpulseFalloff.Linear, // or BABYLON.PhysicsRadialImpulseFalloff.Constant
             }
         );

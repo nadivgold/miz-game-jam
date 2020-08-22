@@ -23,7 +23,7 @@ function handleControls(player, inputMap, deltaTime, explode, physicsHelper, sce
             player.position.z += knobs.playerControls.playerMoveSpeed * deltaTime;
     }
     if(inputMap[" "]){
-        explode(knobs.explosion.radius, knobs.explosion.strength, player.position, knobs.explosion.duration, physicsHelper, scene);
+        explode(player.position, knobs.explosion.duration, physicsHelper, scene);
     }     
     console.log("playerX: ", player.position.x, " playerZ: ", player.position.z)
 }
