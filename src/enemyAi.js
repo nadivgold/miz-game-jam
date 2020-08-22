@@ -1,8 +1,8 @@
 import { knobs } from "./knobs.js";
 
 function handleAi(enemy, player, deltaTime, scene, ground){
-        console.log("enemy: ", enemy.name);
-    if(Math.round(enemy.position.y) === 1 && !knobs.ents.removedEnts.includes(enemy.name) ){
+        console.log("enemy: ", enemy.position.y);
+    if(enemy.position.y <= 1.25 && !knobs.ents.removedEnts.includes(enemy.name) ){
         if(enemy.position.x < player.position.x ){
                 enemy.position.x += knobs.enemyAi.slowMoveSpeed * deltaTime;
         }

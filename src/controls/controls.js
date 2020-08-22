@@ -3,6 +3,8 @@ import { knobs } from "../knobs.js";
 
 function handleControls(player, inputMap, deltaTime, explode, physicsHelper, scene){
     // const limit = ((0.5 * knobs.worldSize.worldx) - 1);
+    if(player.position.y >= 0 ){
+        console.log(player.position.y)
     if(inputMap["a"] || inputMap["A"] || inputMap["ArrowLeft"]){
         //if(player.position.x < limit)
             player.position.x += knobs.playerControls.playerMoveSpeed * deltaTime;
@@ -25,6 +27,7 @@ function handleControls(player, inputMap, deltaTime, explode, physicsHelper, sce
     if(inputMap[" "]){
         explode(player.position, knobs.explosion.duration, physicsHelper, scene);
     }     
+}
 }
 
 

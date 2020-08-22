@@ -5,6 +5,7 @@ import { handleControls } from "./controls/controls.js";
 import { handleAi } from "./enemyAi.js";
 import { pauseToggle } from "./controls/pause.js";          
 import { createGui, createLogger } from './gui.js';
+import { textureCube } from './textureCube.js';
 
 var canvas = document.getElementById("renderCanvas");
 
@@ -23,12 +24,12 @@ var createScene = function () {
     // Camera
     var camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 0, 0), scene);
     camera.radius = 25;
-    camera.heightOffset = 35;
+    camera.heightOffset = 25;
     camera.attachControl(canvas, true);
     camera.inputs.clear();
     // Lightning
     var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
-    light.intensity = 0.7;
+    light.intensity = 7;
     // Ground
     var ground = BABYLON.Mesh.CreateGround("ground1", knobs.worldSize.worldx, knobs.worldSize.worldz, 2, scene);
     var groundMaterial = new BABYLON.BackgroundMaterial("groundMat", scene);
@@ -37,9 +38,10 @@ var createScene = function () {
     ground.material = groundMaterial;
     ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
     
-    
-    var platformColumn = BABYLON.Mesh.CreateBox("column", 100, scene);
-    platformColumn.position.y = -49.99;
+
+    var platformColumn = textureCube("platformColumn","https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/pillarTexture.png", 100, false, scene);
+    platformColumn.position.y = -50.001;
+    platformColumn.rotation = new BABYLON.Vector3(Math.PI,0,0);
 
     // GUI
     var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
