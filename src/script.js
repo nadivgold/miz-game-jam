@@ -4,7 +4,7 @@ import { knobs } from "./knobs.js";
 import { handleControls } from "./controls/controls.js";
 import { handleAi } from "./enemyAi.js";
 import { pauseToggle } from "./controls/pause.js";          
-import { createGui } from './gui.js';
+import { createGui, createLogger } from './gui.js';
 
 var canvas = document.getElementById("renderCanvas");
 
@@ -18,7 +18,7 @@ var createScene = function () {
     var scene = new BABYLON.Scene(engine);
     scene.enablePhysics();
     // Physics engine
-    var physicsViewer = new BABYLON.Debug.PhysicsViewer();
+    // var physicsViewer = new BABYLON.Debug.PhysicsViewer();
     var physicsHelper = new BABYLON.PhysicsHelper(scene);
     // Camera
     var camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 0, 0), scene);
@@ -31,12 +31,21 @@ var createScene = function () {
     light.intensity = 0.7;
     // Ground
     var ground = BABYLON.Mesh.CreateGround("ground1", knobs.worldSize.worldx, knobs.worldSize.worldz, 2, scene);
+    var groundMaterial = new BABYLON.BackgroundMaterial("groundMat", scene);
+    groundMaterial.diffuseTexture = new BABYLON.Texture("https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/groundTexure.png", scene);
+    groundMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+    ground.material = groundMaterial;
     ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 1 }, scene);
+    
+    
+    var platformColumn = BABYLON.Mesh.CreateBox("column", 100, scene);
+    platformColumn.position.y = -49.99;
 
     // GUI
     var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
     const healthGui = createGui(advancedTexture, "200vw");
     const scoreGui = createGui(advancedTexture, "-200vw");
+    let powerUpLog = createLogger(advancedTexture);
 
     var healthLabel = new BABYLON.GUI.TextBlock();
     healthLabel.text = String("Health: " + knobs.health);
@@ -50,10 +59,11 @@ var createScene = function () {
     // create player
     var player = BABYLON.Mesh.CreateBox("player", 1, scene);
     player.material = new BABYLON.StandardMaterial("Test", scene); //Testing
-    player.physicsImpostor = new BABYLON.PhysicsImpostor(player, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 1000, restitution: 1 }, scene)
-    player.position.y = 0.5;
+    player.position.y = 0.51;
+    player.physicsImpostor = new BABYLON.PhysicsImpostor(player, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 1000, restitution: 1 }, scene)    
     camera.lockedTarget = player;
     camera.sensibility = 0;
+    
 
     
     var inputMap ={};
@@ -66,14 +76,12 @@ var createScene = function () {
     }));
     
     // Boxes
-    // const boxes = initBoxes(2, 20, -12, 30, 1, scene, physicsViewer);
     setTimeout(() => {
+        // player.rotation = new BABYLON.Vector3(0, 0, 0);
         knobs.gameStartTime = Math.floor((new Date().getTime() / 1000));
         knobs.state = "play"; 
     }, 5000)
     
-    
-    var limitCall = true;
 
     scene.onBeforeRenderObservable.add(()=>{ 
         var deltaTime = engine.getDeltaTime();
@@ -92,18 +100,32 @@ var createScene = function () {
                         healthLabel.text = String("Health: " + knobs.health);
                         setTimeout(() => { knobs.invulnerable = false }, knobs.iframe);
                     }
-                console.log("collision, invin: ", knobs.invulnerable)
+                // console.log("collision, invin: ", knobs.invulnerable)
             } else {
             }
+        });
             knobs.ents.powerUpArr.forEach(powerUp =>   {
-                if (player.intersectsMesh(powerUp, true)) {
+                if (player.intersectsMesh(powerUp, true) && !knobs.ents.removedEnts.includes(powerUp.name)) {
                     if(!knobs.gotPickup){
-                        knobs.explosion.radius += 5;
+                        if (powerUp.name.includes("radius")){
+                            powerUpLog.text = "Explosion Size Up!";
+                            knobs.explosion.radius++;
+                        } else if (powerUp.name.includes("strength")){
+                            powerUpLog.text = "Explosion Strength Up!";
+                            knobs.explosion.strength++;
+                        }
+                        console.log("powerUp roataion ",  powerUp.rotation.z = 0, " ",
+                        powerUp.rotation.x = 0, " ",
+                        powerUp.rotation.y = 0
+                        )
                         knobs.gotPickup = true;
-                        healthLabel.text = String("Health: " + knobs.health);
-                        setTimeout(() => { knobs.gotPickup = false }, knobs.iframe);
+                        knobs.ents.removedEnts.push(powerUp.name)
+                        scene.removeMesh(powerUp);
+                        powerUp.dispose();
+                        powerUp = null;
+                        setTimeout(() => { knobs.gotPickup = false; powerUpLog.text=""; }, knobs.iframe);
                     }
-                console.log("collision, invin: ", knobs.invulnerable)
+                //console.log("collision, invin: ", knobs.invulnerable)
             } else {
             }
         });

@@ -36,7 +36,20 @@ function createEnt(scene, entID){
             boxMaterial.diffuseColor = new BABYLON.Color3(1, 0, 1);
             var x = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
             var z = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
-            var boxName = "explosionUp:" + x + ',' + z;
+            var boxName = "radius:" + x + ',' + z;
+            var box = BABYLON.MeshBuilder.CreateBox(boxName, boxParams, scene);
+            box.position = new BABYLON.Vector3(x, knobs.ents.dropHeight, z);
+            box.material = boxMaterial;
+            box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, boxImpostorParams, scene);
+            knobs.ents.powerUpArr.push(box);
+        break;
+        case 4: // explosion strength up
+            var boxImpostorParams = { mass: 1, restitution: 0, friction: 1 };
+            var boxMaterial = new BABYLON.StandardMaterial("boxMaterial");
+            boxMaterial.diffuseColor = new BABYLON.Color3(1, 1, 0);
+            var x = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
+            var z = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
+            var boxName = "strength:" + x + ',' + z;
             var box = BABYLON.MeshBuilder.CreateBox(boxName, boxParams, scene);
             box.position = new BABYLON.Vector3(x, knobs.ents.dropHeight, z);
             box.material = boxMaterial;
@@ -69,13 +82,17 @@ function gameDirector(currTime, everyNSec, scene){
             var randomizer = (Math.random() * knobs.difficulty);
             console.log(randomizer)
             if(randomizer >= 0 && randomizer < 5)
-                createEnt(scene, 0)
+                //createEnt(scene, 0)
+                createEnt(scene, 3)
+                createEnt(scene, 4)
             if(randomizer >= 5 && randomizer < 7)
                 createEnt(scene, 1)
             if(randomizer >= 7 && randomizer < 8)
                 createEnt(scene, 2)
             if(randomizer >= 8 && randomizer < 10)
-                createEnt
+                createEnt(scene, 3);
+            if(randomizer >= 10 && randomizer < 12)
+                createEnt(scene, 4);
         }, 0)
         }
         setTimeout(() => {
