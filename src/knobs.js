@@ -6,6 +6,8 @@ export var knobs = {
     score: 0,
     iframe: 1000,
     invulnerable: false,
+    gotPickup: false,
+    gameStartTime: 0,
     explosion: {
         radius: 8,
         strength: 20,
@@ -27,7 +29,12 @@ export var knobs = {
     },
     ents:{
         entArr: [],
+        powerUpArr: [],
         removedEnts:[],
         killPlane: -5,
+        dropHeight: 30,
+    },
+    etc: {
+        waveLimit: true,
     }
 };

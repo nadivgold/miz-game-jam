@@ -1,5 +1,5 @@
 import { explode } from "./explode.js";
-import { initBoxes, createWave } from "./gameMaster.js";
+import { gameDirector } from "./gameMaster.js";
 import { knobs } from "./knobs.js";
 import { handleControls } from "./controls/controls.js";
 import { handleAi } from "./enemyAi.js";
@@ -50,7 +50,7 @@ var createScene = function () {
     // create player
     var player = BABYLON.Mesh.CreateBox("player", 1, scene);
     player.material = new BABYLON.StandardMaterial("Test", scene); //Testing
-    // player.physicsImpostor = new BABYLON.PhysicsImpostor(player, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 100, restitution: 1 }, scene)
+    player.physicsImpostor = new BABYLON.PhysicsImpostor(player, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 1000, restitution: 1 }, scene)
     player.position.y = 0.5;
     camera.lockedTarget = player;
     camera.sensibility = 0;
@@ -67,16 +67,20 @@ var createScene = function () {
     
     // Boxes
     // const boxes = initBoxes(2, 20, -12, 30, 1, scene, physicsViewer);
-    knobs.gameStartTime = Math.floor((new Date().getTime() / 1000));
-    knobs.state = "play"; 
+    setTimeout(() => {
+        knobs.gameStartTime = Math.floor((new Date().getTime() / 1000));
+        knobs.state = "play"; 
+    }, 5000)
     
-    var testCallOnce = true;
+    
+    var limitCall = true;
 
     scene.onBeforeRenderObservable.add(()=>{ 
         var deltaTime = engine.getDeltaTime();
         var currTime = Math.floor((new Date().getTime() / 1000));
         pauseToggle(inputMap);
         scoreLabel.text = String("Score: " + knobs.score);
+        knobs.difficulty = (Math.floor(knobs.score/5) + 1); // changes the number that spawn
         if (knobs.state === "play") {
             handleControls(player, inputMap, deltaTime, explode, physicsHelper, scene)
             knobs.ents.entArr.forEach(box => (handleAi(box, player, deltaTime, scene, ground)));
@@ -91,14 +95,19 @@ var createScene = function () {
                 console.log("collision, invin: ", knobs.invulnerable)
             } else {
             }
+            knobs.ents.powerUpArr.forEach(powerUp =>   {
+                if (player.intersectsMesh(powerUp, true)) {
+                    if(!knobs.gotPickup){
+                        knobs.explosion.radius += 5;
+                        knobs.gotPickup = true;
+                        healthLabel.text = String("Health: " + knobs.health);
+                        setTimeout(() => { knobs.gotPickup = false }, knobs.iframe);
+                    }
+                console.log("collision, invin: ", knobs.invulnerable)
+            } else {
+            }
         });
-        if(((currTime - knobs.gameStartTime) %  5 === 0)  && testCallOnce){
-            testCallOnce = false;
-            createWave(1, scene)
-            setTimeout(() => {
-                testCallOnce = true;
-            }, 3000)
-        }
+            gameDirector(currTime, 5, scene);
         }   
     })
 
