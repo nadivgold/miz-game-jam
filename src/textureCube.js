@@ -1,6 +1,9 @@
 function textureCube(name, path, cubeSize, alpha, scene) {
     var cubeTexture = new BABYLON.StandardMaterial("pillarTexture", scene);
-    var textureImg = new BABYLON.Texture(path, scene);
+    var textureImg  = new BABYLON.Color3(0, 0, 1)
+    if(path){
+        textureImg = new BABYLON.Texture(path, scene);
+    }
     cubeTexture.diffuseTexture = textureImg;
     if(alpha){
         cubeTexture.diffuseTexture.hasAlpha = true;

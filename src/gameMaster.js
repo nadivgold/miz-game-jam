@@ -59,16 +59,11 @@ function createEnt(scene, entID){
         break;
         default: //standard enemies
             var boxImpostorParams = { mass: 1, restitution: 0, friction: 1 };
-            // var boxMaterial = new BABYLON.StandardMaterial("boxMaterial");
-            // boxMaterial.diffuseColor = new BABYLON.Color3(1, 0, 0);
             var x = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
             var z = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
             var boxName = "skelly:" + x + ',' + z; 
             var box = textureCube(boxName, "https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/template.png", 2, true, scene);
-            // BABYLON.MeshBuilder.CreateBox(boxName, boxParams, scene);
             box.position = new BABYLON.Vector3(x, knobs.ents.dropHeight, z);
-            // box.rotation = new BABYLON.Vector3(Math.PI,0,0);
-            // box.material = boxMaterial;
             box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, boxImpostorParams, scene);
             // physicsViewer.showImpostor(box.physicsImpostor);
             knobs.ents.entArr.push(box);
