@@ -3,7 +3,7 @@ import { knobs } from "./knobs.js";
 import { handleControls } from "./controls/controls.js";
 import { handleAi } from "./enemyAi.js";
 import { pauseToggle } from "./controls/pause.js";          
-import { createGui, createLogger, healthBar } from './gui.js';
+import { createGui, createLogger, healthBar, openStartScreen, openEndScreen } from './gui.js';
 import { textureCube } from './textureCube.js';
 import { playerTextureSwitcher } from './textureAnimPlayer.js';
 
@@ -45,13 +45,17 @@ var createScene = function () {
 
     // GUI
     var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
     healthBar(advancedTexture);
     const scoreGui = createGui(advancedTexture, "-200vw");
     let powerUpLog = createLogger(advancedTexture);
 
     var scoreLabel = new BABYLON.GUI.TextBlock();
+    scoreLabel.color = "#e6482e";
     scoreLabel.text = String("Score: " + knobs.score);
     scoreGui.addControl(scoreLabel);
+
+        openStartScreen(advancedTexture);
 
 
     // create player
@@ -80,11 +84,12 @@ var createScene = function () {
         knobs.gameStartTime = Math.floor((new Date().getTime() / 1000));
         // music credits https://soundimage.org/chiptunes/
         var music = new BABYLON.Sound("Music", "https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/music.mp3", scene, null, {
-        loop: true,
-        autoplay: true
-    });
-        knobs.state = "play"; 
-    }, 5000)
+            loop: true,
+            autoplay: true
+        });
+        knobs.state = "ready"; 
+        openStartScreen(advancedTexture);
+    }, 5000);
     
 
     scene.onBeforeRenderObservable.add(()=>{ 
@@ -141,7 +146,10 @@ var createScene = function () {
             gameDirector(currTime, 5, scene);
             if(knobs.health <= 0 || player.position.y < 0 ){ //handle death
                 player.material = playerTextureSwitcher("player","https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/deadplayer.png", 1, true, scene);
-                knobs.state = "game-over"
+                knobs.state = "game-over";
+                setTimeout(() => {
+                    openEndScreen(advancedTexture);
+                }, 2000);
             }
         }   
     })
