@@ -15,6 +15,17 @@ function createGui(advancedTexture, position ){
         return rect1;
 }
 
+function addImage(advancedTexture, position, imagePath){
+        var image = new BABYLON.GUI.Image("but", imagePath);
+        image.width = 0.2;
+        image.autoScale = true
+        advancedTexture.addControl(image);    
+        image.top = "20px";
+        image.left = position;
+        image.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        return image;
+}
+
 function createLogger(advancedTexture){
     var text1 = new BABYLON.GUI.TextBlock();
     text1.text = "";
@@ -25,4 +36,21 @@ function createLogger(advancedTexture){
     return text1;
 }
 
-export { createGui, createLogger }
+function healthBar(advancedTexture){
+    knobs.guiHearts.forEach((image)=>{image.dispose()});
+    var position = 200;
+    for(let i = 0; i < Math.floor(knobs.health/2); i++){
+        let pos = String(position) + "vw";
+        let img = addImage(advancedTexture, pos, "https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/full-heart.png")
+        knobs.guiHearts.push(img);
+        position += 20;
+    }
+    if(knobs.health % 2){
+        let pos = String(position) + "vw";
+        let img = addImage(advancedTexture, pos, "https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/half-heart.png")
+        knobs.guiHearts.push(img);
+        position += 20;
+    }
+}
+
+export { createGui, createLogger, healthBar }

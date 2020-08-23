@@ -4,7 +4,7 @@ import { knobs } from "./knobs.js";
 import { handleControls } from "./controls/controls.js";
 import { handleAi } from "./enemyAi.js";
 import { pauseToggle } from "./controls/pause.js";          
-import { createGui, createLogger } from './gui.js';
+import { createGui, createLogger, healthBar } from './gui.js';
 import { textureCube } from './textureCube.js';
 import { playerTextureSwitcher } from './textureAnimPlayer.js';
 
@@ -46,13 +46,9 @@ var createScene = function () {
 
     // GUI
     var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-    const healthGui = createGui(advancedTexture, "200vw");
+    healthBar(advancedTexture);
     const scoreGui = createGui(advancedTexture, "-200vw");
     let powerUpLog = createLogger(advancedTexture);
-
-    var healthLabel = new BABYLON.GUI.TextBlock();
-    healthLabel.text = String("Health: " + knobs.health);
-    healthGui.addControl(healthLabel)
 
     var scoreLabel = new BABYLON.GUI.TextBlock();
     scoreLabel.text = String("Score: " + knobs.score);
@@ -99,7 +95,7 @@ var createScene = function () {
                     if(!knobs.invulnerable){
                         knobs.health -= 1;
                         knobs.invulnerable = true;
-                        healthLabel.text = String("Health: " + knobs.health);
+                        healthBar(advancedTexture);
                         setTimeout(() => { knobs.invulnerable = false }, knobs.iframe);
                     }
                 // console.log("collision, invin: ", knobs.invulnerable)
@@ -118,9 +114,8 @@ var createScene = function () {
                         } else if (powerUp.name.includes("health")){
                             powerUpLog.text = "Health Up!";
                             knobs.health += 2;
-                            if(knobs.health > knobs.maxHealth)
-                                knobs.maxHealth = knobs.health;
-                            healthLabel.text = String("Health: " + knobs.health);
+                            healthBar(advancedTexture);
+                           // healthLabel.text = String("Health: " + knobs.health);
                         }
                         console.log("powerUp roataion ",  powerUp.rotation.z = 0, " ",
                         powerUp.rotation.x = 0, " ",
