@@ -1,5 +1,5 @@
-function textureCube(name, path, cubeSize, alpha, scene) {
-    var cubeTexture = new BABYLON.StandardMaterial("tex", scene);
+function playerTextureSwitcher(name, path, cubeSize, alpha, scene) {
+    var cubeTexture = new BABYLON.StandardMaterial("pillarTexture", scene);
     var textureImg  = new BABYLON.Color3(0, 0, 1)
     if(path){
         textureImg = new BABYLON.Texture(path, scene);
@@ -19,9 +19,7 @@ function textureCube(name, path, cubeSize, alpha, scene) {
         faceUV: faceUV,
         wrap: true
     };
-    var texturedBox = BABYLON.MeshBuilder.CreateBox(name, {...options, size:cubeSize}, scene);
-    texturedBox.material = cubeTexture;
-    return texturedBox;
+    return cubeTexture;
 }
 
-export { textureCube }
+export { playerTextureSwitcher }

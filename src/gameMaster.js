@@ -17,40 +17,41 @@ function createEnt(scene, entID){
         break;
         case 2: //even harder enemies
             var boxImpostorParams = { mass: 3, restitution: 0, friction: 3 };
-            var boxMaterial = new BABYLON.StandardMaterial("boxMaterial");
-            boxMaterial.diffuseColor = new BABYLON.Color3(0, 1, 0);
             var x = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
             var z = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
-            var boxName = "box:" + x + ',' + z;
-            var box = BABYLON.MeshBuilder.CreateBox(boxName, boxParams, scene);
+            var boxName = "wiz:" + x + ',' + z;
+            var box = textureCube(boxName, "https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/wiz1.png", 2, true, scene);
             box.position = new BABYLON.Vector3(x, knobs.ents.dropHeight, z);
-            box.material = boxMaterial;
             box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, boxImpostorParams, scene);
             knobs.ents.entArr.push(box);
         break;
         case 3: // explosion radius up
             var boxImpostorParams = { mass: 1, restitution: 0, friction: 1 };
-            var boxMaterial = new BABYLON.StandardMaterial("boxMaterial");
-            boxMaterial.diffuseColor = new BABYLON.Color3(1, 0, 1);
             var x = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
             var z = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
             var boxName = "radius:" + x + ',' + z;
-            var box = BABYLON.MeshBuilder.CreateBox(boxName, boxParams, scene);
+            var box = textureCube(boxName, "https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/powerup1.png", 2, true, scene);
             box.position = new BABYLON.Vector3(x, knobs.ents.dropHeight, z);
-            box.material = boxMaterial;
             box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, boxImpostorParams, scene);
             knobs.ents.powerUpArr.push(box);
         break;
         case 4: // explosion strength up
             var boxImpostorParams = { mass: 1, restitution: 0, friction: 1 };
-            var boxMaterial = new BABYLON.StandardMaterial("boxMaterial");
-            boxMaterial.diffuseColor = new BABYLON.Color3(1, 1, 0);
             var x = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
             var z = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
             var boxName = "strength:" + x + ',' + z;
-            var box = BABYLON.MeshBuilder.CreateBox(boxName, boxParams, scene);
+            var box = textureCube(boxName, "https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/powerup2.png", 2, true, scene);
             box.position = new BABYLON.Vector3(x, knobs.ents.dropHeight, z);
-            box.material = boxMaterial;
+            box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, boxImpostorParams, scene);
+            knobs.ents.powerUpArr.push(box);
+        break;
+        case 5: // health up
+            var boxImpostorParams = { mass: 1, restitution: 0, friction: 1 };
+            var x = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
+            var z = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
+            var boxName = "health:" + x + ',' + z;
+            var box = textureCube(boxName, "https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/powerup3.png", 2, true, scene);
+            box.position = new BABYLON.Vector3(x, knobs.ents.dropHeight, z);
             box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, boxImpostorParams, scene);
             knobs.ents.powerUpArr.push(box);
         break;
@@ -70,16 +71,16 @@ function createEnt(scene, entID){
 
 function gameDirector(currTime, everyNSec, scene){
     if(((currTime - knobs.gameStartTime) %  everyNSec === 0)  && knobs.etc.waveLimit){ // creates a wave every 5 seconds
-        console.log(" game Direcotr run is true");
         knobs.etc.waveLimit = false;
         for(var i = 0; i < knobs.difficulty; i++){
             setTimeout(() => {
             var randomizer = (Math.random() * knobs.difficulty);
             console.log(randomizer)
             if(randomizer >= 0 && randomizer < 5)
-                createEnt(scene, 0)
-                // createEnt(scene, 3)
-                // createEnt(scene, 4)
+                // createEnt(scene, 0)
+                createEnt(scene, 3)
+                createEnt(scene, 4)
+                createEnt(scene, 5)
             if(randomizer >= 5 && randomizer < 7)
                 createEnt(scene, 1)
             if(randomizer >= 7 && randomizer < 8)

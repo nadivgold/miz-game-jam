@@ -3,11 +3,14 @@ export var knobs = {
     frameRate: 25, // 40 fps
     difficulty: 0,
     health: 6,
+    maxHealth: 6,
     score: 0,
     iframe: 1000,
+    powerUpLimit: 800,
     invulnerable: false,
     gotPickup: false,
     gameStartTime: 0,
+    playerAnimFrame: 1,
     explosion: {
         radius: 8,
         strength: 20,

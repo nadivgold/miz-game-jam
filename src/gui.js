@@ -5,9 +5,9 @@ function createGui(advancedTexture, position ){
         rect1.width = 0.2;
         rect1.height = "40px";
         rect1.cornerRadius = 20;
-        rect1.color = "Orange";
+        rect1.color = "gray";
         rect1.thickness = 4;
-        rect1.background = "green";
+        // rect1.background = "white";
         advancedTexture.addControl(rect1);    
         rect1.top = "5px";
         rect1.left = position;

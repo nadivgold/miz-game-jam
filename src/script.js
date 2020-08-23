@@ -6,6 +6,7 @@ import { handleAi } from "./enemyAi.js";
 import { pauseToggle } from "./controls/pause.js";          
 import { createGui, createLogger } from './gui.js';
 import { textureCube } from './textureCube.js';
+import { playerTextureSwitcher } from './textureAnimPlayer.js';
 
 var canvas = document.getElementById("renderCanvas");
 
@@ -24,7 +25,7 @@ var createScene = function () {
     // Camera
     var camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 0, 0), scene);
     camera.radius = 25;
-    camera.heightOffset = 25;
+    camera.heightOffset = 15;
     camera.attachControl(canvas, true);
     camera.inputs.clear();
     // Lightning
@@ -59,9 +60,8 @@ var createScene = function () {
 
 
     // create player
-    var player = BABYLON.Mesh.CreateBox("player", 1, scene);
-    player.material = new BABYLON.StandardMaterial("Test", scene); //Testing
-    player.position.y = 0.51;
+    var player = textureCube("player","https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/player1.png", 1, true, scene);
+    player.position.y = 0.51;   
     player.physicsImpostor = new BABYLON.PhysicsImpostor(player, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 1000, restitution: 1 }, scene)    
     camera.lockedTarget = player;
     camera.sensibility = 0;
@@ -103,8 +103,8 @@ var createScene = function () {
                         setTimeout(() => { knobs.invulnerable = false }, knobs.iframe);
                     }
                 // console.log("collision, invin: ", knobs.invulnerable)
-            } else {
             }
+            // else {}
         });
             knobs.ents.powerUpArr.forEach(powerUp =>   {
                 if (player.intersectsMesh(powerUp, true) && !knobs.ents.removedEnts.includes(powerUp.name)) {
@@ -115,6 +115,12 @@ var createScene = function () {
                         } else if (powerUp.name.includes("strength")){
                             powerUpLog.text = "Explosion Strength Up!";
                             knobs.explosion.strength++;
+                        } else if (powerUp.name.includes("health")){
+                            powerUpLog.text = "Health Up!";
+                            knobs.health += 2;
+                            if(knobs.health > knobs.maxHealth)
+                                knobs.maxHealth = knobs.health;
+                            healthLabel.text = String("Health: " + knobs.health);
                         }
                         console.log("powerUp roataion ",  powerUp.rotation.z = 0, " ",
                         powerUp.rotation.x = 0, " ",
@@ -125,13 +131,17 @@ var createScene = function () {
                         scene.removeMesh(powerUp);
                         powerUp.dispose();
                         powerUp = null;
-                        setTimeout(() => { knobs.gotPickup = false; powerUpLog.text=""; }, knobs.iframe);
+                        setTimeout(() => { knobs.gotPickup = false; powerUpLog.text=""; }, knobs.powerUpLimit);
                     }
                 //console.log("collision, invin: ", knobs.invulnerable)
-            } else {
-            }
+            } 
+            //else {}
         });
             gameDirector(currTime, 5, scene);
+            if(knobs.health <= 0 || player.position.y < 0 ){ //handle death
+                player.material = playerTextureSwitcher("player","https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/deadplayer.png", 1, true, scene);
+                knobs.state = "game-over"
+            }
         }   
     })
 
