@@ -77,6 +77,11 @@ var createScene = function () {
     setTimeout(() => {
         // player.rotation = new BABYLON.Vector3(0, 0, 0);
         knobs.gameStartTime = Math.floor((new Date().getTime() / 1000));
+        // music credits https://soundimage.org/chiptunes/
+        var music = new BABYLON.Sound("Music", "https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/music.mp3", scene, null, {
+        loop: true,
+        autoplay: true
+    });
         knobs.state = "play"; 
     }, 5000)
     

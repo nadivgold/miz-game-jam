@@ -1,6 +1,7 @@
 import { knobs } from "./knobs.js";
+import { playerTextureSwitcher } from "./textureAnimPlayer.js";
 
-function explode(origin, duration, physicsHelper, scene){
+function explode(player, origin, duration, physicsHelper, scene){
     if(knobs.explosion.enabled){
         knobs.explosion.enabled = 0;
         var event = physicsHelper.applyRadialExplosionImpulse( // or .applyRadialExplosionForce
@@ -22,6 +23,7 @@ function explode(origin, duration, physicsHelper, scene){
         // Debug - END
         setTimeout(() => {
             knobs.explosion.enabled = 1;
+            player.material = playerTextureSwitcher("player","https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/player1.png", 1, true, scene);
         }, knobs.explosion.timeout);
     } 
 }

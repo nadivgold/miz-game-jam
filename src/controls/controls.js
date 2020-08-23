@@ -29,7 +29,7 @@ function handleControls(player, inputMap, deltaTime, explode, physicsHelper, sce
                 isMoving = true;
         }
         if(inputMap[" "]){
-            explode(player.position, knobs.explosion.duration, physicsHelper, scene);
+            explode(player, player.position, knobs.explosion.duration, physicsHelper, scene);
             isMoving = true;
         }     
     if(isMoving){
