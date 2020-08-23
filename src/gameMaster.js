@@ -16,7 +16,7 @@ function createEnt(scene, entID){
             knobs.ents.entArr.push(box);
         break;
         case 2: //even harder enemies
-            var boxImpostorParams = { mass: 3, restitution: 0, friction: 3 };
+            var boxImpostorParams = { mass: 5, restitution: 0, friction: 1};
             var x = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
             var z = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
             var boxName = "wiz:" + x + ',' + z;
@@ -55,6 +55,16 @@ function createEnt(scene, entID){
             box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, boxImpostorParams, scene);
             knobs.ents.powerUpArr.push(box);
         break;
+        case 6: // big boss
+            var boxImpostorParams = { mass: 15, restitution: 0, friction: 1 };
+            var x = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
+            var z = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
+            var boxName = "king:" + x + ',' + z;
+            var box = textureCube(boxName, "https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/king1.png", 6, true, scene);
+            box.position = new BABYLON.Vector3(x, knobs.ents.dropHeight, z);
+            box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, boxImpostorParams, scene);
+            knobs.ents.entArr.push(box);
+        break;
         default: //standard enemies
             var boxImpostorParams = { mass: 1, restitution: 0, friction: 1 };
             var x = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
@@ -85,11 +95,15 @@ function gameDirector(currTime, everyNSec, scene){
                 if(randomizer >= 6 && randomizer < 9)
                     createEnt(scene, 1)
                 if(randomizer >= 9 && randomizer < 10)
-                    createEnt(scene, 3);
+                    createEnt(scene, 4);
                 if(randomizer >= 10 && randomizer < 14)
                     createEnt(scene, 2);
-                if(randomizer >= 15)
-                    createEnt(scene, 4);
+                if(randomizer >= 15 && randomizer < 20)
+                    createEnt(scene, 3);
+                if(randomizer >= 20){
+                    createEnt(scene, 6)
+                    return;
+                }  
             }
         }, 0)
         }

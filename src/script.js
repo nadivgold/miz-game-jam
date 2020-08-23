@@ -141,10 +141,10 @@ var createScene = function () {
                     if(!knobs.gotPickup){
                         if (powerUp.name.includes("radius")){
                             powerUpLog.text = "Explosion Size Up!";
-                            knobs.explosion.radius++;
+                            knobs.explosion.radius += 2;
                         } else if (powerUp.name.includes("strength")){
                             powerUpLog.text = "Explosion Strength Up!";
-                            knobs.explosion.strength++;
+                            knobs.explosion.strength += 2;
                         } else if (powerUp.name.includes("health")){
                             powerUpLog.text = "Health Up!";
                             knobs.health += 2;
@@ -154,7 +154,7 @@ var createScene = function () {
                         knobs.ents.removedEnts.push(powerUp.name)
                         scene.removeMesh(powerUp);
                         powerUp.dispose();
-                        knobs.ents.totalEnts -=
+                        knobs.ents.totalEnts -= 1;
                         powerUp = null;
                         setTimeout(() => { knobs.gotPickup = false; powerUpLog.text=""; }, knobs.powerUpLimit);
                     }

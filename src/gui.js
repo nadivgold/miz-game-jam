@@ -29,7 +29,7 @@ function addImage(advancedTexture, position, imagePath){
 function createLogger(advancedTexture){
     var text1 = new BABYLON.GUI.TextBlock();
     text1.text = "";
-    text1.color = "black";
+    text1.color = "#f4b41b";
     text1.fontSize = 24;
     text1.top = "200vh";
     advancedTexture.addControl(text1);

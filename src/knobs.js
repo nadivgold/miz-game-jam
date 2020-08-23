@@ -36,7 +36,7 @@ export var knobs = {
     },
     ents:{
         totalEnts: 0,
-        maxTotalEnts: 50,
+        maxTotalEnts: 40,
         entArr: [],
         powerUpArr: [],
         removedEnts:[],
