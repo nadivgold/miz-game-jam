@@ -14,7 +14,7 @@ export var knobs = {
     startPageGui: [],
     particles: undefined,
     maxWaveSize: 10,
-    difficutyRampSpeed: 10,
+    difficutyRampSpeed: 7,
     explosion: {
         radius: 8,
         strength: 20,
