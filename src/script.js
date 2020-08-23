@@ -154,6 +154,7 @@ var createScene = function () {
                         knobs.ents.removedEnts.push(powerUp.name)
                         scene.removeMesh(powerUp);
                         powerUp.dispose();
+                        knobs.ents.totalEnts -=
                         powerUp = null;
                         setTimeout(() => { knobs.gotPickup = false; powerUpLog.text=""; }, knobs.powerUpLimit);
                     }
@@ -162,8 +163,8 @@ var createScene = function () {
         });
             gameDirector(currTime, 5, scene);
             if(knobs.health <= 0 || player.position.y < 0 ){ //handle death
-                player.material = playerTextureSwitcher("player","https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/deadplayer.png", 1, true, scene);
                 knobs.state = "game-over";
+                player.material = playerTextureSwitcher("player","https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/deadplayer.png", 1, true, scene);
                 setTimeout(() => {
                     openEndScreen(advancedTexture);
                 }, 1500);

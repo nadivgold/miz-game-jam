@@ -3,7 +3,7 @@ import { textureCube } from './textureCube.js';
 
 function createEnt(scene, entID){
     const limit = ((0.5 * knobs.worldSize.worldx) - 1);
-    const boxParams = { height: 2, width: 2, depth: 2 };
+    knobs.ents.totalEnts += 1;
     switch (entID){
         case 1: //harder enemies
             var boxImpostorParams = { mass: 3, restitution: 0, friction: 1 };
@@ -76,19 +76,21 @@ function gameDirector(currTime, everyNSec, scene){
             setTimeout(() => {
             var randomizer = (Math.random() * knobs.difficulty);
             console.log(randomizer)
-            if(randomizer >= 0 && randomizer < 4)
-                createEnt(scene, 0)
-                createEnt(scene, 0)
-            if(randomizer >= 4 && randomizer < 5)
-                createEnt(scene, 5)
-            if(randomizer >= 6 && randomizer < 9)
-                createEnt(scene, 1)
-            if(randomizer >= 9 && randomizer < 10)
-                createEnt(scene, 3);
-            if(randomizer >= 10 && randomizer < 14)
-                createEnt(scene, 2);
-            if(randomizer >= 15)
-                createEnt(scene, 4);
+            if(knobs.ents.totalEnts < knobs.ents.maxTotalEnts){
+                if(randomizer >= 0 && randomizer < 4)
+                    createEnt(scene, 0)
+                    createEnt(scene, 0)
+                if(randomizer >= 4 && randomizer < 5)
+                    createEnt(scene, 5)
+                if(randomizer >= 6 && randomizer < 9)
+                    createEnt(scene, 1)
+                if(randomizer >= 9 && randomizer < 10)
+                    createEnt(scene, 3);
+                if(randomizer >= 10 && randomizer < 14)
+                    createEnt(scene, 2);
+                if(randomizer >= 15)
+                    createEnt(scene, 4);
+            }
         }, 0)
         }
         setTimeout(() => {

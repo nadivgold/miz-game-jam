@@ -21,6 +21,7 @@ function handleAi(enemy, player, deltaTime, scene, ground){
         scene.removeMesh(enemy);
         enemy.dispose();
         enemy = null;
+        knobs.ents.totalEnts -= 1;
     }
 }
 
