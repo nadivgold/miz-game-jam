@@ -13,6 +13,8 @@ export var knobs = {
     guiHearts: [],
     startPageGui: [],
     particles: undefined,
+    maxWaveSize: 10,
+    difficutyRampSpeed: 6,
     explosion: {
         radius: 8,
         strength: 20,

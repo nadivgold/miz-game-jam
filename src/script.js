@@ -160,7 +160,7 @@ var createScene = function () {
             } 
             //else {}
         });
-            gameDirector(currTime, 10, scene);
+            gameDirector(currTime, 5, scene);
             if(knobs.health <= 0 || player.position.y < 0 ){ //handle death
                 player.material = playerTextureSwitcher("player","https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/deadplayer.png", 1, true, scene);
                 knobs.state = "game-over";

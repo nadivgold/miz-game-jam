@@ -74,7 +74,7 @@ function gameDirector(currTime, everyNSec, scene){
         knobs.etc.waveLimit = false;
         for(var i = 0; i < Math.min(knobs.difficulty, knobs.maxWaveSize); i++){
             setTimeout(() => {
-            var randomizer = (Math.random() * Math.min(knobs.difficulty, 16));
+            var randomizer = (Math.random() * knobs.difficulty);
             console.log(randomizer)
             if(randomizer >= 0 && randomizer < 4)
                 createEnt(scene, 0)
