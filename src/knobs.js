@@ -17,7 +17,7 @@ export var knobs = {
         radius: 8,
         strength: 20,
         duration: 50,
-        timeout: 1000,
+        timeout: 1500,
         enabled: 1,
     },
     playerControls: {

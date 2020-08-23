@@ -72,9 +72,9 @@ function createEnt(scene, entID){
 function gameDirector(currTime, everyNSec, scene){
     if(((currTime - knobs.gameStartTime) %  everyNSec === 0)  && knobs.etc.waveLimit){ // creates a wave every 5 seconds
         knobs.etc.waveLimit = false;
-        for(var i = 0; i < knobs.difficulty; i++){
+        for(var i = 0; i < Math.min(knobs.difficulty, 15); i++){
             setTimeout(() => {
-            var randomizer = (Math.random() * knobs.difficulty);
+            var randomizer = (Math.random() * Math.min(knobs.difficulty, 16));
             console.log(randomizer)
             if(randomizer >= 0 && randomizer < 4)
                 createEnt(scene, 0)
@@ -99,26 +99,3 @@ function gameDirector(currTime, everyNSec, scene){
 
 export { gameDirector};
 
-
-
-// function initBoxes(boxSize, boxPadding, minXY, maxXY, maxZ, scene){
-//     var boxes = []
-//     var boxParams = { height: boxSize, width: boxSize, depth: boxSize };
-//     var boxImpostorParams = { mass: 0.5 * boxSize, restitution: 0, friction: 1 };
-//     var boxMaterial = new BABYLON.StandardMaterial("boxMaterial");
-//     boxMaterial.diffuseColor = new BABYLON.Color3(1, 0, 0);
-//     for (var x = minXY; x <= maxXY; x += boxSize + boxPadding) {
-//         for (var z = minXY; z <= maxXY; z += boxSize + boxPadding) {
-//             for (var y = boxSize / 2; y <= maxZ; y += boxSize) {
-//                 var boxName = "box:" + x + ',' + y;
-//                 var box = BABYLON.MeshBuilder.CreateBox(boxName, boxParams, scene);
-//                 box.position = new BABYLON.Vector3(x, y, knobs.ents.dropHeight);
-//                 box.material = boxMaterial;
-//                 box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, boxImpostorParams, scene);
-//                 // physicsViewer.showImpostor(box.physicsImpostor);
-//                 knobs.ents.entArr.push(box);
-//             }
-//         }
-//     }
-//     return boxes;
-// }
