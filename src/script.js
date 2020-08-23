@@ -109,7 +109,6 @@ var createScene = function () {
                         healthBar(advancedTexture);
                         setTimeout(() => { knobs.invulnerable = false }, knobs.iframe);
                     }
-                // console.log("collision, invin: ", knobs.invulnerable)
             }
             // else {}
         });
@@ -126,12 +125,7 @@ var createScene = function () {
                             powerUpLog.text = "Health Up!";
                             knobs.health += 2;
                             healthBar(advancedTexture);
-                           // healthLabel.text = String("Health: " + knobs.health);
                         }
-                        console.log("powerUp roataion ",  powerUp.rotation.z = 0, " ",
-                        powerUp.rotation.x = 0, " ",
-                        powerUp.rotation.y = 0
-                        )
                         knobs.gotPickup = true;
                         knobs.ents.removedEnts.push(powerUp.name)
                         scene.removeMesh(powerUp);
@@ -139,7 +133,6 @@ var createScene = function () {
                         powerUp = null;
                         setTimeout(() => { knobs.gotPickup = false; powerUpLog.text=""; }, knobs.powerUpLimit);
                     }
-                //console.log("collision, invin: ", knobs.invulnerable)
             } 
             //else {}
         });

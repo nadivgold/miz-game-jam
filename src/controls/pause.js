@@ -7,7 +7,6 @@ function pauseToggle(inputMap){
     if(inputMap["Escape"])
         if(knobs.state === "pause")
                 knobs.state = "play";
-    console.log(knobs.state)
 }
 
 export {pauseToggle}
