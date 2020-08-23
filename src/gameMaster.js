@@ -7,14 +7,11 @@ function createEnt(scene, entID){
     switch (entID){
         case 1: //harder enemies
             var boxImpostorParams = { mass: 3, restitution: 0, friction: 1 };
-            var boxMaterial = new BABYLON.StandardMaterial("boxMaterial");
-            boxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 1);
             var x = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
             var z = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
-            var boxName = "box:" + x + ',' + z;
-            var box = BABYLON.MeshBuilder.CreateBox(boxName, boxParams, scene);
+            var boxName = "warrior:" + x + ',' + z;
+            var box = textureCube(boxName, "https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/knight1.png", 2, true, scene);
             box.position = new BABYLON.Vector3(x, knobs.ents.dropHeight, z);
-            box.material = boxMaterial;
             box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, boxImpostorParams, scene);
             knobs.ents.entArr.push(box);
         break;
@@ -62,7 +59,7 @@ function createEnt(scene, entID){
             var x = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
             var z = ((Math.random()*limit) * (Math.round(Math.random()) ? -1 : 1));
             var boxName = "skelly:" + x + ',' + z; 
-            var box = textureCube(boxName, "https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/template.png", 2, true, scene);
+            var box = textureCube(boxName, "https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/skelly.png", 2, true, scene);
             box.position = new BABYLON.Vector3(x, knobs.ents.dropHeight, z);
             box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, boxImpostorParams, scene);
             // physicsViewer.showImpostor(box.physicsImpostor);
