@@ -33,7 +33,7 @@ function explode(player, origin, duration, physicsHelper, bomb, scene){
  // Helpers
  function addMaterialToMesh(sphere, scene) {
     var sphereMaterial = new BABYLON.StandardMaterial("sphereMaterial", scene);
-    sphereMaterial.alpha = 0.5;
+    sphereMaterial.alpha = 0.25;
     sphere.material = sphereMaterial;
 }
 
