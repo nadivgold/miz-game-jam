@@ -3,7 +3,8 @@ import { playerTextureSwitcher } from "./textureAnimPlayer.js";
 
 function explode(player, origin, duration, physicsHelper, bomb, scene){
     if(knobs.explosion.enabled){
-        bomb.play();
+        bomb.play()
+        knobs.particles.start();
         knobs.explosion.enabled = 0;
         var event = physicsHelper.applyRadialExplosionImpulse( // or .applyRadialExplosionForce
             origin,
@@ -20,6 +21,7 @@ function explode(player, origin, duration, physicsHelper, bomb, scene){
         setTimeout(function (debugData) {
             hideExplosionDebug(debugData);
             event.dispose(); // we need to cleanup/dispose, after we don't use the data anymore
+            knobs.particles.stop();
         }, duration, debugData);
         // Debug - END
         setTimeout(() => {
@@ -33,7 +35,7 @@ function explode(player, origin, duration, physicsHelper, bomb, scene){
  // Helpers
  function addMaterialToMesh(sphere, scene) {
     var sphereMaterial = new BABYLON.StandardMaterial("sphereMaterial", scene);
-    sphereMaterial.alpha = 0.25;
+    sphereMaterial.alpha = 0.2;
     sphere.material = sphereMaterial;
 }
 

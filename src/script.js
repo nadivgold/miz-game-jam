@@ -61,9 +61,31 @@ var createScene = function () {
     // create player
     var player = textureCube("player","https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/player1.png", 1, true, scene);
     player.position.y = 0.51;   
-    player.physicsImpostor = new BABYLON.PhysicsImpostor(player, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 1000, restitution: 1 }, scene)    
+    player.physicsImpostor = new BABYLON.PhysicsImpostor(player, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 99999, restitution: 1 }, scene)    
     camera.lockedTarget = player;
     camera.sensibility = 0;
+
+    // Particles 
+    var particleSystem = new BABYLON.ParticleSystem("particles", 2000, scene);
+    particleSystem.particleTexture = new BABYLON.Texture('https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/particle.png', scene);
+    particleSystem.emitter = player;
+    particleSystem.minEmitBox = new BABYLON.Vector3(-1, 0, 0); // Starting all from
+    particleSystem.maxEmitBox = new BABYLON.Vector3(1, 0, 0); // To...
+    particleSystem.minSize = 1;
+    particleSystem.maxSize = 1.5;
+    particleSystem.minLifeTime = 0.1;
+    particleSystem.maxLifeTime = 0.2;
+    particleSystem.emitRate = 500;
+    particleSystem.gravity = new BABYLON.Vector3(0, -9.81, 0);
+    particleSystem.direction1 = new BABYLON.Vector3(-7, 8, 3);
+    particleSystem.direction2 = new BABYLON.Vector3(7, 8, -3);
+    particleSystem.minAngularSpeed = 0;
+    particleSystem.maxAngularSpeed = Math.PI;
+    particleSystem.minEmitPower =  7;
+    particleSystem.maxEmitPower = 10;
+    particleSystem.updateSpeed = 0.005;
+    
+    knobs.particles = particleSystem;
     
 
     
@@ -75,7 +97,8 @@ var createScene = function () {
     scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnKeyUpTrigger, function (evt) {
         inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";
     }));
-    
+
+
     // sound from https://freesound.org/people/citeyo1/sounds/430307/
     var bomb = new BABYLON.Sound("explode", "https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/explosion.mp3", scene);
     // Boxes

@@ -12,6 +12,7 @@ export var knobs = {
     playerAnimFrame: 1,
     guiHearts: [],
     startPageGui: [],
+    particles: undefined,
     explosion: {
         radius: 8,
         strength: 20,
