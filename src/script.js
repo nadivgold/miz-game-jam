@@ -1,4 +1,3 @@
-import { explode } from "./explode.js";
 import { gameDirector } from "./gameMaster.js";
 import { knobs } from "./knobs.js";
 import { handleControls } from "./controls/controls.js";
@@ -73,6 +72,8 @@ var createScene = function () {
         inputMap[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";
     }));
     
+    // sound from https://freesound.org/people/citeyo1/sounds/430307/
+    var bomb = new BABYLON.Sound("explode", "https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/explosion.mp3", scene);
     // Boxes
     setTimeout(() => {
         // player.rotation = new BABYLON.Vector3(0, 0, 0);
@@ -93,7 +94,7 @@ var createScene = function () {
         scoreLabel.text = String("Score: " + knobs.score);
         knobs.difficulty = (Math.floor(knobs.score/5) + 1); // changes the number that spawn
         if (knobs.state === "play") {
-            handleControls(player, inputMap, deltaTime, explode, physicsHelper, scene)
+            handleControls(player, inputMap, deltaTime, physicsHelper, bomb, scene)
             knobs.ents.entArr.forEach(box => (handleAi(box, player, deltaTime, scene, ground)));
             knobs.ents.entArr.forEach(box =>   {
                 if (player.intersectsMesh(box, true)) {

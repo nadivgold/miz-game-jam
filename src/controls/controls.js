@@ -1,7 +1,9 @@
 import { knobs } from "../knobs.js";
 import { animPlayer } from "../playerAnim.js";
+import { explode } from "../explode.js";
 
-function handleControls(player, inputMap, deltaTime, explode, physicsHelper, scene){
+
+function handleControls(player, inputMap, deltaTime, physicsHelper, bomb, scene){
     // const limit = ((0.5 * knobs.worldSize.worldx) - 1);
     var isMoving = false;
     if(player.position.y >= 0 ){
@@ -29,7 +31,7 @@ function handleControls(player, inputMap, deltaTime, explode, physicsHelper, sce
                 isMoving = true;
         }
         if(inputMap[" "]){
-            explode(player, player.position, knobs.explosion.duration, physicsHelper, scene);
+            explode(player, player.position, knobs.explosion.duration, physicsHelper, bomb, scene);
             isMoving = true;
         }     
     if(isMoving){

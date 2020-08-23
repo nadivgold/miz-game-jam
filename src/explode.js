@@ -1,8 +1,9 @@
 import { knobs } from "./knobs.js";
 import { playerTextureSwitcher } from "./textureAnimPlayer.js";
 
-function explode(player, origin, duration, physicsHelper, scene){
+function explode(player, origin, duration, physicsHelper, bomb, scene){
     if(knobs.explosion.enabled){
+        bomb.play();
         knobs.explosion.enabled = 0;
         var event = physicsHelper.applyRadialExplosionImpulse( // or .applyRadialExplosionForce
             origin,
