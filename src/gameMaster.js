@@ -72,7 +72,7 @@ function createEnt(scene, entID){
 function gameDirector(currTime, everyNSec, scene){
     if(((currTime - knobs.gameStartTime) %  everyNSec === 0)  && knobs.etc.waveLimit){ // creates a wave every 5 seconds
         knobs.etc.waveLimit = false;
-        for(var i = 0; i < Math.min(knobs.difficulty, 15); i++){
+        for(var i = 0; i < Math.min(knobs.difficulty, knobs.maxWaveSize); i++){
             setTimeout(() => {
             var randomizer = (Math.random() * Math.min(knobs.difficulty, 16));
             console.log(randomizer)

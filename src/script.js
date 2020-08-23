@@ -121,7 +121,7 @@ var createScene = function () {
         var currTime = Math.floor((new Date().getTime() / 1000));
         pauseToggle(inputMap);
         scoreLabel.text = String("Score: " + knobs.score);
-        knobs.difficulty = (Math.floor(knobs.score/4) + 1); // changes the number that spawn
+        knobs.difficulty = (Math.floor(knobs.score/knobs.difficutyRampSpeed) + 1); // changes the number that spawn
         if (knobs.state === "play") {
             handleControls(player, inputMap, deltaTime, physicsHelper, bomb, scene)
             knobs.ents.entArr.forEach(box => (handleAi(box, player, deltaTime, scene, ground)));
