@@ -76,15 +76,16 @@ function gameDirector(currTime, everyNSec, scene){
             setTimeout(() => {
             var randomizer = (Math.random() * knobs.difficulty);
             console.log(randomizer)
-            if(randomizer >= 0 && randomizer < 5)
+            if(randomizer >= 0 && randomizer < 4)
                 createEnt(scene, 0)
-            if(randomizer >= 4 && randomizer < 6)
+                createEnt(scene, 0)
+            if(randomizer >= 4 && randomizer < 5)
                 createEnt(scene, 5)
-            if(randomizer >= 5 && randomizer < 8)
+            if(randomizer >= 6 && randomizer < 9)
                 createEnt(scene, 1)
-            if(randomizer >= 8 && randomizer < 10)
+            if(randomizer >= 9 && randomizer < 10)
                 createEnt(scene, 3);
-            if(randomizer >= 8 && randomizer < 15)
+            if(randomizer >= 10 && randomizer < 14)
                 createEnt(scene, 2);
             if(randomizer >= 15)
                 createEnt(scene, 4);

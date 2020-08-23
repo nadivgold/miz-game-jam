@@ -60,7 +60,8 @@ var createScene = function () {
 
     // create player
     var player = textureCube("player","https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/player1.png", 1, true, scene);
-    player.position.y = 0.51;   
+    player.position.y = 0.51;
+    player.rotation = new BABYLON.Vector3(0,0,0);
     player.physicsImpostor = new BABYLON.PhysicsImpostor(player, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 99999, restitution: 1 }, scene)    
     camera.lockedTarget = player;
     camera.sensibility = 0;
@@ -159,13 +160,13 @@ var createScene = function () {
             } 
             //else {}
         });
-            gameDirector(currTime, 5, scene);
+            gameDirector(currTime, 10, scene);
             if(knobs.health <= 0 || player.position.y < 0 ){ //handle death
                 player.material = playerTextureSwitcher("player","https://raw.githubusercontent.com/nadivgold/miz-game-jam/master/assets/deadplayer.png", 1, true, scene);
                 knobs.state = "game-over";
                 setTimeout(() => {
                     openEndScreen(advancedTexture);
-                }, 2000);
+                }, 1500);
             }
         }   
     })
